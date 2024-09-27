@@ -1,0 +1,43 @@
+Notes to plan UI on 16x2 character LCD/VFD.
+
+available space
+
++----------------+
+|0123456789abcdef|
+|0123456789abcdef|
++----------------+
+
+Normal feed mode
+
++----------------+
+|Feed  +100μm/r  |
+|RPM   3000    OK| (OK | WARN | ERR)
++----------------+
+
+Constant feed mode
+
++----------------+
+|Feed  +400mm/min|
+|RPM   3000   ERR| (OK | WARN | ERR)
++----------------+
+
+Threading mode (metric)
+
++----------------+
+|Thread +1.00mm/R|
+|RPM    300  WARN| (OK | WARN | ERR)
++----------------+
+
+Threading mode (imperial)
+
++----------------+
+|Thread +24TPI   |
+|RPM    300    OK| (OK | WARN | ERR)
++----------------+
+
+Slotting mode
+
++----------------+
+|Slot   400mm/min|
+|Depth  100mm RDY| (RDY | GO+ | GO- | ERR)
++----------------+

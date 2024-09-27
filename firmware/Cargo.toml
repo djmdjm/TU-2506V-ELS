@@ -1,0 +1,23 @@
+[package]
+name = "els"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+embedded-hal = "1.0.0"
+nb = "1"
+cortex-m = "0.7"
+cortex-m-rt = "0.7"
+panic-halt = "0.2.0"
+cortex-m-semihosting = "0.5.0"
+fugit = "0.3.7"
+panic-probe = "0.3.1"
+
+#[dependencies.stm32f4]
+#version = "0.15.1"
+#features = ["stm32f411"]
+
+[dependencies.stm32f4xx-hal]
+version = "0.21.0"
+#path = "../stm32f4xx-hal"
+features = ["stm32f411"]

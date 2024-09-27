@@ -1,0 +1,46 @@
+Encoder inputs
+PA0  - T2_CH1 - ENC1a (spindle)
+PA1  - T2_CH2 - ENC1b (spindle)
+PA6  - T9_CH1 - ENC2a (feed)
+PA7  - T9_CH2 - ENC2b (feed)
+PC15 - GPIOC  - ENC2 button (feed)
+PB6  - T4_CH1 - ENC3a (mode)
+PB7  - T4_CH2 - ENC3b (mode)
+PB8  - GPIOB  - ENC3 button (mode)
+
+Button inputs
+PA4  - GPIOA  - Button 1
+
+Other inputs
+PA3 - GPIOA  - Motor HLFB input
+
+Outputs
+PC13 - GPIOC  - Board LED
+PB10 - GPIOB  - Motor Enable output
+PB1  - GPIOB  - Motor Direction output
+PB0  - GPIOB  - Motor Step output
+
+VFD I/O
+PA15 - GPIOA  - DB0
+PA12 - GPIOA  - DB1
+PA8  - GPIOA  - DB2
+PB14 - GPIOB  - DB3
+PB13 - GPIOB  - DB4
+PB12 - GPIOB  - DB5
+PB15 - GPIOB  - DB6
+PA11 - GPIOA  - DB7
+PB4  - GPIOB  - E
+PB9  - GPIOB  - RW
+PB3  - GPIOB  - RS
+
+Free
+PA2  - GPIOA  -
+PA5  - GPIOA  - 
+PA9  - GPIOA  - TX1
+PA10 - GPIOA  - RX1 (w/ 100k pull up to make BOOT0 reliable)
+PB2  - GPIOB  -
+PB5  - GPIOB  -
+PC14 - GPIOC  - (nb. low current limit)
+
+
+

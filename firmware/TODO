@@ -1,0 +1,9 @@
+More control modes:
+	Constant feed mode (mm/s)
+	Slotting mode (mm/s with depth limit)
+	Depth limit for threading
+
+Finesse UI
+	Do something with the big red button (feed hold? reverse?)
+	Reverse direction in software (needs accel/decel control)
+
