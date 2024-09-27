@@ -5,6 +5,8 @@ lathe, an Optimum TU-2506V. There are other lathes on the market that
 seem to be based on the same casting (e.g. the Weiss WBL250F) that
 might be compatible.
 
+![installed ELS controller](/images/installed.jpg)
+
 The project contains CAD designs for the mechanical parts, schematics,
 PCB designs and firmware for the control board.
 
