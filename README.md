@@ -32,7 +32,7 @@ The mechanical CAD designs were done in
 myself, I also used FreeCAD's CAM processor to generate the G-Code.
 
 The control boards was designed in [KiCAD](https://www.kicad.org/)
-version 8 and were fabricated at JLCPCB. The PCB files has LCSC
+version 8 and were fabricated at JLCPCB. The PCB files have LCSC
 annotations for automated assembly of the (few) SMT components.
 
 The firmware for the control board was written in Rust using the
@@ -58,6 +58,9 @@ fairly expensive part, but I love the aesthetics of a VFD.
 The rest of the BOM for the controller can be extracted from the
 KiCAD files for each of the respective boards. I mostly used parts that
 I had on hand, so there are some odd choices in places.
+
+The controller needs a 24VDC power supply at about 250mA in addition to
+whatever the servo control needs. I used a Meanwell DIN rail mount PSU.
 
 The servo motor I used a
 [Teknic Clearpath CPM-SDSK-2331S-ELS](https://teknic.com/model-info/CPM-SDSK-2331S-ELS/).
