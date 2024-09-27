@@ -59,7 +59,8 @@ the cycle cost here.
 The calculations are unashamedly metric. The TPI threading mode is largely an
 afterthought and isn't that accurate. Depending on the TPI count, as much as
 ~850nm/thread error can be accumulated which will make inch threads inaccurate
-over longer distances. I.e. don't use this to cut an ACME leadscrew.
+over longer distances. It's probably fine for nuts and short screw threads but
+don't use it to cut an ACME leadscrew.
 
 There is one interrupt handler hooked up to one of the timers that runs a 1KHz
 monotonic counter that is used to drive the 10Hz display update and the RPM

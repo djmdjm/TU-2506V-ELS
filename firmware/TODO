@@ -7,3 +7,7 @@ Finesse UI
 	Do something with the big red button (feed hold? reverse?)
 	Reverse direction in software (needs accel/decel control)
 
+Improve TPI mode
+	Can make a control.set_feed_rate_tpi() that calculates the
+	multiplication factor directly from the TPI. This should avoid
+	the errors in the current µm/rev approximation.
