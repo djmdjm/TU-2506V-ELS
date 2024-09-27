@@ -9,7 +9,7 @@ might be compatible.
 
 The project contains CAD designs for the mechanical parts, schematics,
 PCB designs and firmware for the control board. Build photos
-[https://photos.google.com/share/AF1QipOmF3oVsJtj0tLDA7D8ZUFRA7_QTG3Cf1XSVP2GjohUuVMBAQHxomHKcaGD1ETOJg?key=TW1sOVEwWHhqX3FoNWtXSDA4Q3BxZG1Bc1JGLTBn](here).
+[here](https://photos.google.com/share/AF1QipOmF3oVsJtj0tLDA7D8ZUFRA7_QTG3Cf1XSVP2GjohUuVMBAQHxomHKcaGD1ETOJg?key=TW1sOVEwWHhqX3FoNWtXSDA4Q3BxZG1Bc1JGLTBn).
 
 ## Caveat
 
