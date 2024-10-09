@@ -269,8 +269,7 @@ where
             (self.imperial_thread_pitch_index as isize + feed_enc_pulses as isize)
                 .clamp(0, Self::IMPERIAL_THREAD_PITCHES.len() as isize - 1) as usize;
         let tpi = Self::IMPERIAL_THREAD_PITCHES[self.imperial_thread_pitch_index];
-        let pitch = 25400 / tpi;
-        control.set_feed_rate_micron_per_rev(pitch);
+        control.set_feed_rate_tpi(tpi);
     }
 
     // Display for servo off mode.

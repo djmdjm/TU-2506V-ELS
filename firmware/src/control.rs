@@ -84,4 +84,23 @@ impl Control {
         t *= crate::MOTOR_PPR;
         self.feed_per_rev_factor = t
     }
+    pub fn set_feed_rate_tpi(&mut self, tpi: i32) {
+        // XXX bounds checking.
+        self.feed_rate_micron_per_rev = 2540/tpi; // Approximation only.
+        self.fractional_pulses_remaining = 0;
+        // XXX consider fixed point split; is 32.32 ideal?
+        // Precalculate multiplication factor.
+        // Pulses to fractional turns (32.32 fixed point).
+        let mut t: i64 = 1 << 32;
+        t *= crate::ENCODER_RATIO_SPINDLE;
+        t /= crate::ENCODER_PPR * crate::ENCODER_RATIO_ENCODER;
+        // Encoder turns to fractional leadscrew turns (32.32).
+        t *= 25400;
+        t /= tpi as i64;
+        t *= crate::DRIVE_RATIO_LEADSCREW;
+        t /= crate::DRIVE_RATIO_MOTOR * crate::LEADSCREW_PITCH;
+        // Leadscrew turns to encoder pulses (32.32).
+        t *= crate::MOTOR_PPR;
+        self.feed_per_rev_factor = t
+    }
 }
