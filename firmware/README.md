@@ -56,12 +56,6 @@ math to simplify (as 32.32 fixed point) to simplify calculations. Once of the
 nice things about having a 100MHz MCU is not having to worry too much about
 the cycle cost here.
 
-The calculations are unashamedly metric. The TPI threading mode is largely an
-afterthought and isn't that accurate. Depending on the TPI count, as much as
-~850nm/thread error can be accumulated which will make inch threads inaccurate
-over longer distances. It's probably fine for nuts and short screw threads but
-don't use it to cut an ACME leadscrew.
-
 There is one interrupt handler hooked up to one of the timers that runs a 1KHz
 monotonic counter that is used to drive the 10Hz display update and the RPM
 sampling/smoothing.
@@ -72,3 +66,13 @@ lots of pulses. Conversely, the servo requires a maximum pulse frequency of
 500KHz. I couldn't get this running fast enough in Rust, so the actual pulse
 generation is written in assembly.
 
+Motor, encoder, leadscrew and gear/pulley ratio constants are in `src/main.rs`.
+You'll almost certainly need to edit these.
+
+The calculations are unashamedly metric and inch leadscrews are not supported.
+
+There's currently no detection of situations where the control loop can't keep
+up (i.e. can't generate servo pulses fast enough for a given spindle RPM).
+I'm fairly sure this situation isn't possible with the parameters I've used,
+and I've certainly not encountered it in use (though admittedly I haven't
+tried to run the leadscrew at 4mm/rev and 1500RPM).
