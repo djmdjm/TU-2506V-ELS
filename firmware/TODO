@@ -7,3 +7,8 @@ Finesse UI
 	Do something with the big red button (feed hold? reverse?)
 	Reverse direction in software (needs accel/decel control)
 
+Control loop
+	Detect when we can't keep up with the spindle (either servo RPM
+	limit or pulse output rate)
+	Implement acceleration and deceleration control
+	Implement max servo RPM
