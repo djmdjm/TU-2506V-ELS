@@ -2,8 +2,9 @@
 use crate::control::{Control, Direction};
 use crate::lcd;
 
+const WELCOME_MESSAGE_TIMEOUT: i64 = 2500; // ms.
 const WARN_MESSAGE_TIMEOUT: i64 = 500; // ms.
-const FEED_BUTTON_HOLD_DEBUG_TIME: i64 = 1000; // ms.
+const BUTTON_HOLD_DEBUG_TIME: i64 = 1000; // ms.
 
 #[derive(Clone, Copy, PartialEq)]
 pub enum Mode {
@@ -65,7 +66,7 @@ pub struct UI<'a, DISPLAY> {
     feed_rate_index: usize,
     metric_thread_pitch_index: usize,
     imperial_thread_pitch_index: usize,
-    mode_enc_debug_hold: i64,
+    debug_hold: i64,
     spindle_enc_last: i32,
     cold: bool,
 }
@@ -105,7 +106,7 @@ where
             feed_rate_index: Self::DEFAULT_FEED_RATE_INDEX,
             metric_thread_pitch_index: Self::DEFAULT_METRIC_THREAD_PITCH,
             imperial_thread_pitch_index: Self::DEFAULT_IMPERIAL_THREAD_PITCH,
-            mode_enc_debug_hold: 0,
+            debug_hold: 0,
             spindle_enc_last: 0,
             cold: true,
         }
@@ -132,6 +133,9 @@ where
             self.mode_enc_pos_last = mode_enc_pos;
             self.feed_enc_pos_last = feed_enc_pos;
             control.set_feed_rate_micron_per_rev(Self::FEED_RATES[self.feed_rate_index]);
+            self.message1 = "TU-2506V-ELS";
+            self.message2 = "djm 20241117";
+            self.message_timeout = now_ms + WELCOME_MESSAGE_TIMEOUT;
             self.cold = false;
         }
         let mode_enc_pulses: i16 =
@@ -143,28 +147,30 @@ where
         let spindle_moving = rpm > 3;
 
         let mut status: &str = "OK";
-        if self.mode != Mode::ServoOff && !servo_ok {
+        if self.mode == Mode::ServoOff {
+            status = "OFF";
+        } else if !servo_ok {
             status = "!SERVO";
         }
 
-        // Hold mode encoder button down to toggle debug display.
+        // Hold mode+feed encoder buttons down to toggle debug display.
         // While button is held, ignore rotation of the encoder.
-        if mode_enc_button {
-            if self.mode_enc_debug_hold == 0 {
+        if mode_enc_button && feed_enc_button {
+            if self.debug_hold == 0 {
                 // Just started pressing mode enc button for debug mode.
                 // Start timeout.
-                self.mode_enc_debug_hold = now_ms + FEED_BUTTON_HOLD_DEBUG_TIME;
-            } else if self.mode_enc_debug_hold < now_ms {
+                self.debug_hold = now_ms + BUTTON_HOLD_DEBUG_TIME;
+            } else if self.debug_hold < now_ms {
                 // Held for long enough; enter/exit debug display.
                 self.debug_mode = !self.debug_mode;
                 self.debug_page = DebugPage::Help;
-                self.mode_enc_debug_hold = 0;
+                self.debug_hold = 0;
             }
         } else {
-            self.mode_enc_debug_hold = 0;
+            self.debug_hold = 0;
         }
 
-        if mode_enc_pulses != 0 && !mode_enc_button {
+        if mode_enc_pulses != 0 && self.debug_hold == 0 {
             if self.debug_mode {
                 self.debug_page = self.debug_page.add(mode_enc_pulses);
             } else if spindle_moving {
@@ -172,20 +178,31 @@ where
                 self.message1 = "STOP SPINDLE";
                 self.message2 = "TO CHANGE MODE";
                 self.message_timeout = now_ms + WARN_MESSAGE_TIMEOUT;
+            } else if !mode_enc_button {
+                // Require button to be pressed too.
+                self.message1 = "PRESS KNOB TO";
+                self.message2 = "CHANGE MODE";
+                self.message_timeout = now_ms + WARN_MESSAGE_TIMEOUT;
             }
         }
 
         // Special handling for threading modes: don't allow pitch changes
-        // while spindle is moving.
-        match self.mode {
-            Mode::ThreadMetric | Mode::ThreadImperial => {
-                if spindle_moving && !self.debug_mode && feed_enc_pulses != 0 {
-                    self.message1 = "STOP SPINDLE TO";
-                    self.message2 = "CHANGE PITCH";
-                    self.message_timeout = now_ms + WARN_MESSAGE_TIMEOUT;
+        // while spindle is moving. Also require button be pressed.
+        if !self.debug_mode && feed_enc_pulses != 0 && self.debug_hold == 0 {
+            match self.mode {
+                Mode::ThreadMetric | Mode::ThreadImperial => {
+                    if spindle_moving {
+                        self.message1 = "STOP SPINDLE TO";
+                        self.message2 = "CHANGE PITCH";
+                        self.message_timeout = now_ms + WARN_MESSAGE_TIMEOUT;
+                    } else if !feed_enc_button {
+                        self.message1 = "PRESS KNOB TO";
+                        self.message2 = "CHANGE PITCH";
+                        self.message_timeout = now_ms + WARN_MESSAGE_TIMEOUT;
+                    }
                 }
+                _ => (),
             }
-            _ => (),
         }
 
         // If there's an active warning message then display that.
@@ -197,14 +214,14 @@ where
 
         // If spindle stopped and mode wheel moved, then change mode.
         let mut mode_changed: bool = false;
-        if !self.debug_mode && mode_enc_pulses != 0 {
+        if !self.debug_mode && self.debug_hold == 0 && mode_enc_pulses != 0 {
             let new_mode: Mode = self.mode.add(mode_enc_pulses.into());
             mode_changed = new_mode != self.mode;
             self.mode = new_mode;
         }
 
         // If feed changed, update (unless in debug mode).
-        if !self.debug_mode && (mode_changed || feed_enc_pulses != 0) {
+        if !self.debug_mode && self.debug_hold == 0 && (mode_changed || feed_enc_pulses != 0) {
             match self.mode {
                 Mode::Feed => self.update_feed(control, feed_enc_pulses),
                 Mode::ThreadMetric => self.update_thread_metric(control, feed_enc_pulses),
