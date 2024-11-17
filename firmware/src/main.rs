@@ -253,7 +253,7 @@ fn main() -> ! {
         }
         // Changes in enable and direction require at least 1μs to
         // be recognised.
-        if !last_motor_enable {
+        if last_motor_enable != motor_enable {
             motor_enable_out.set_state(motor_enable.into());
             delay.delay_us(2);
             last_motor_enable = motor_enable;
