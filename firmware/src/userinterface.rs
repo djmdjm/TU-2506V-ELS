@@ -143,7 +143,7 @@ where
         let spindle_moving = rpm > 3;
 
         let mut status: &str = "OK";
-        if !servo_ok {
+        if self.mode != Mode::ServoOff && !servo_ok {
             status = "!SERVO";
         }
 
