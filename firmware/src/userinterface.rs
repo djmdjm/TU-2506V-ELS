@@ -86,7 +86,6 @@ where
         3000, 3500, 4000,
     ];
     const DEFAULT_METRIC_THREAD_PITCH: usize = 11;
-    // XXX need more accuracy here. Switch to nanometres/rev?
     const IMPERIAL_THREAD_PITCHES: [i32; 21] = [
         80, 72, 64, 56, 48, 40, 32, 28, 24, 20, 18, 16, 14, 13, 12, 11, 10, 9, 8, 7, 6,
     ];
